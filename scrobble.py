@@ -1,5 +1,4 @@
 import json, hashlib, time, sys, requests, dotenv, os
-from datetime import datetime, timezone
 dotenv.load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
@@ -42,6 +41,8 @@ def scrobble_file(path, sk):
             params[f"timestamp[{i}]"] = ts
         resp = api_call(params)
         attr = resp.get("scrobbles", {}).get("@attr", {})
+        if attr.get('ignored', 0) > 0:
+            print(attr)
         print(f"  accepted: {attr.get('accepted', 0)}  ignored: {attr.get('ignored', 0)}")
         time.sleep(0.25)
 
